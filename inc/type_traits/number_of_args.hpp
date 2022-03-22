@@ -26,8 +26,11 @@ namespace ratl
 			static constexpr auto value = number_of_args<Signature>::value;
 	};
 
-	template<typename Signature>
-	static constexpr auto number_of_args_v = number_of_args<Signature>::value;
+	static_assert(number_of_args<int()>::value == 0, "Number of arguments of int() is 0");
+	static_assert(number_of_args<int(int, int)>::value == 2,
+				  "Number of arguments of int(int, int) is 2");
+	static_assert(number_of_args<std::function<int(int)>>::value == 1,
+				  "Number of arguments of std::function<int(int)> is 1");
 }// namespace ratl
 
 #endif// TYPE_TRAITS_NUMBER_OF_ARGS_HPP
