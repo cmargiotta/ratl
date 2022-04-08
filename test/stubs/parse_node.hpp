@@ -1,7 +1,7 @@
 #ifndef STUBS_PARSE_NODE_HPP
 #define STUBS_PARSE_NODE_HPP
 
-#include "parse_tree/parse_node.hpp"
+#include "parser/parse_node.hpp"
 
 class node : public ratl::parse_node<int, char>
 {

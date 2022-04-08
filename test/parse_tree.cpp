@@ -1,9 +1,9 @@
 #include <iostream>
 
 #include "catch2/catch.hpp"
-#include "parse_tree/parse_node.hpp"
-#include "parse_tree/parser.hpp"
-#include "parse_tree/tokenizer/exact_tokenizer.hpp"
+#include "parser/parse_node.hpp"
+#include "parser/parser.hpp"
+#include "parser/tokenizer/exact_tokenizer.hpp"
 #include "stubs/parse_node.hpp"
 
 SCENARIO("Parse tree realization")
