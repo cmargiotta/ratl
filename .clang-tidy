@@ -11,16 +11,18 @@ Checks: >-
   -cppcoreguidelines-avoid-goto,
   -cppcoreguidelines-avoid-magic-numbers,
   -cppcoreguidelines-avoid-non-const-global-variables,
+  -cppcoreguidelines-non-private-member-variables-in-classes,
   -cppcoreguidelines-pro-bounds-array-to-pointer-decay,
   -cppcoreguidelines-pro-type-vararg,
   -google-readability-braces-around-statements,
   -google-readability-function-size,
   -misc-no-recursion,
+  -misc-non-private-member-variables-in-classes,
   -modernize-return-braced-init-list,
   -modernize-use-nodiscard,
   -modernize-use-trailing-return-type,
   -performance-unnecessary-value-param,
-  -readability-magic-numbers,
+  -readability-magic-numbers
 
 CheckOptions:
   - key: readability-function-cognitive-complexity.Threshold
@@ -33,7 +35,5 @@ CheckOptions:
     value: lower_case
   - key: readability-identifier-naming.NamespaceCase
     value: lower_case
-  - key: readability-identifier-naming.PrivateMemberSuffix
-    value: _
   - key: readability-identifier-naming.StructCase
     value: lower_case
