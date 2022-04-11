@@ -41,16 +41,13 @@ namespace ratl
 	};
 
 	template<std::size_t n, typename Signature>
-	using arg_type_t = typename arg_type<n, Signature>::type;
+	struct arg_type<n, Signature*>
+	{
+			using type = typename arg_type<n, Signature>::type;
+	};
 
-	static_assert(std::is_same<arg_type_t<0, int()>, void>::value,
-				  "First argument of a int() function is void");
-	static_assert(std::is_same<arg_type_t<0, int(int)>, int>::value,
-				  "First argument of a int(int) function is int");
-	static_assert(std::is_same<arg_type_t<1, int(char, int)>, int>::value,
-				  "Second argument of a int(char, int) function is int");
-	static_assert(std::is_same<arg_type_t<1, std::function<int(char, int)>>, int>::value,
-				  "Second argument of a std::function<int(char, int)> is int");
+	template<std::size_t n, typename Signature>
+	using arg_type_t = typename arg_type<n, Signature>::type;
 
 }// namespace ratl
 
