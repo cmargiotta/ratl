@@ -84,3 +84,5 @@ IncludeCategories:
     Priority: 3
   - Regex: '\".+\"'
     Priority: 4
+  - Regex: '\".+/.+\"'
+    Priority: 5
