@@ -2,9 +2,7 @@
 
 #include <type_traits>
 
-#include "type_traits/arg_type.hpp"
-#include "type_traits/number_of_args.hpp"
-#include "type_traits/return_type.hpp"
+#include "type_traits.hpp"
 
 void function1();
 int	 function2(int, int);
