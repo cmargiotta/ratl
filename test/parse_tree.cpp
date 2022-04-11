@@ -1,6 +1,7 @@
+#include <catch2/catch.hpp>
+
 #include <iostream>
 
-#include "catch2/catch.hpp"
 #include "parser/parse_node.hpp"
 #include "parser/parser.hpp"
 #include "parser/tokenizer/exact_tokenizer.hpp"

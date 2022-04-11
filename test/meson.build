@@ -7,4 +7,12 @@ parse_tree_test = executable(
 	dependencies: [ratl, catch2]
 )
 
+traits_test = executable(
+	'traits_test', 
+	'traits.cpp', 
+	link_with: [test_main], 
+	dependencies: [ratl, catch2]
+)
+
 test('Parse tree test', parse_tree_test)
+test('Type traits test', traits_test)
