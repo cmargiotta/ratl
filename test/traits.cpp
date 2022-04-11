@@ -12,7 +12,7 @@ struct A
 		int b;
 };
 
-MAKE_EXISTANCE_VERIFIER(b)
+MAKE_EXISTENCE_VERIFIER(b)
 
 TEST_CASE("Function traits work correctly", "[traits]")
 {

@@ -3,7 +3,7 @@
 
 #include <type_traits>
 
-#define MAKE_EXISTANCE_VERIFIER(member)                                                            \
+#define MAKE_EXISTENCE_VERIFIER(member)                                                            \
 	namespace ratl                                                                                 \
 	{                                                                                              \
 		template<typename, typename = void>                                                        \
@@ -11,7 +11,7 @@
 		{                                                                                          \
 		};                                                                                         \
 		template<typename Type>                                                                    \
-		struct has_##member<Type, decltype(std::declval<Type>().member, void())> : std::true_type  \
+		struct has_##member<Type, decltype(Type::member, void())> : std::true_type                 \
 		{                                                                                          \
 		};                                                                                         \
 		template<typename Type>                                                                    \
