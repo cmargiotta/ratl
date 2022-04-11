@@ -29,21 +29,18 @@ namespace ratl
 	};
 
 	template<std::size_t n, typename Ret, typename Arg, typename... Args>
-	struct arg_type<n, Ret(Arg, Args...)>
+	struct arg_type<n, Ret(Arg, Args...)> : arg_type<n - 1, Ret(Args...)>
 	{
-			using type = typename arg_type<n - 1, Ret(Args...)>::type;
 	};
 
 	template<std::size_t n, typename Signature>
-	struct arg_type<n, std::function<Signature>>
+	struct arg_type<n, std::function<Signature>> : arg_type<n, Signature>
 	{
-			using type = typename arg_type<n, Signature>::type;
 	};
 
 	template<std::size_t n, typename Signature>
-	struct arg_type<n, Signature*>
+	struct arg_type<n, Signature*> : arg_type<n, Signature>
 	{
-			using type = typename arg_type<n, Signature>::type;
 	};
 
 	template<std::size_t n, typename Signature>

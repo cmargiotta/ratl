@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <functional>
+#include <type_traits>
 
 namespace ratl
 {
@@ -12,24 +13,23 @@ namespace ratl
 	 * @tparam Signature
 	 */
 	template<typename Signature>
-	struct number_of_args;
+	struct number_of_args : std::integral_constant<std::size_t, 0>
+	{
+	};
 
 	template<typename Ret, typename... Args>
-	struct number_of_args<Ret(Args...)>
+	struct number_of_args<Ret(Args...)> : std::integral_constant<std::size_t, sizeof...(Args)>
 	{
-			static constexpr std::size_t value = sizeof...(Args);
 	};
 
 	template<typename Signature>
-	struct number_of_args<std::function<Signature>>
+	struct number_of_args<std::function<Signature>> : number_of_args<Signature>
 	{
-			static constexpr auto value = number_of_args<Signature>::value;
 	};
 
 	template<typename Signature>
-	struct number_of_args<Signature*>
+	struct number_of_args<Signature*> : number_of_args<Signature>
 	{
-			static constexpr auto value = number_of_args<Signature>::value;
 	};
 
 	template<typename Signature>

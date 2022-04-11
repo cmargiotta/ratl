@@ -21,15 +21,13 @@ namespace ratl
 	};
 
 	template<typename Signature>
-	struct return_type<std::function<Signature>>
+	struct return_type<std::function<Signature>> : return_type<Signature>
 	{
-			using type = typename return_type<Signature>::type;
 	};
 
 	template<typename Signature>
-	struct return_type<Signature*>
+	struct return_type<Signature*> : return_type<Signature>
 	{
-			using type = typename return_type<Signature>::type;
 	};
 
 	template<typename Signature>
