@@ -2,6 +2,7 @@
 #define TYPE_TRAITS_HPP
 
 #include "type_traits/arg_type.hpp"
+#include "type_traits/member_function_exists.hpp"
 #include "type_traits/number_of_args.hpp"
 #include "type_traits/return_type.hpp"
 

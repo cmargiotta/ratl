@@ -7,6 +7,13 @@
 void function1();
 int	 function2(int, int);
 
+struct A
+{
+		int b;
+};
+
+MAKE_EXISTANCE_VERIFIER(b)
+
 TEST_CASE("Function traits work correctly", "[traits]")
 {
 	REQUIRE(std::is_same_v<ratl::arg_type_t<0, decltype(function1)>, void>);
@@ -18,4 +25,6 @@ TEST_CASE("Function traits work correctly", "[traits]")
 
 	REQUIRE(ratl::number_of_args_v<decltype(function1)> == 0);
 	REQUIRE(ratl::number_of_args_v<decltype(function2)> == 2);
+
+	REQUIRE(ratl::has_b_v<A>);
 }
