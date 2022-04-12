@@ -14,5 +14,13 @@ traits_test = executable(
 	dependencies: [ratl, catch2]
 )
 
+utils_test = executable(
+	'utils_test', 
+	'utils.cpp', 
+	link_with: [test_main], 
+	dependencies: [ratl, catch2]
+)
+
 test('Parse tree test', parse_tree_test)
 test('Type traits test', traits_test)
+test('Utils test', utils_test)
