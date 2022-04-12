@@ -20,4 +20,5 @@ TEST_CASE("Utilities work correctly", "[utils]")
 
     test.test_number = test.test_number + 1;
     REQUIRE(test.test_number == 256);
+    REQUIRE(test.data == 0x0001);
 }
