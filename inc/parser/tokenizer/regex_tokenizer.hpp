@@ -1,6 +1,7 @@
 #ifndef PARSER_TOKENIZER_REGEX_TOKENIZER_HPP
 #define PARSER_TOKENIZER_REGEX_TOKENIZER_HPP
 
+#include <algorithm>
 #include <initializer_list>
 #include <set>
 #include <sstream>
@@ -16,12 +17,12 @@ namespace ratl::tokenizer
 {
     /**
      * @brief Supported identifiers: comma separated list of values
-     *
      */
     class regex_tokenizer
     {
         private:
             std::unordered_map<std::string, ratl::regex_tree> matchers;
+            std::unordered_map<std::string, std::string>      exact_matchers;
 
         public:
             using ParsedType = std::string;
@@ -32,7 +33,36 @@ namespace ratl::tokenizer
                 ratl::regex_parser parser;
                 for (const auto& id: ids)
                 {
-                    matchers[id] = parser(id);
+                    auto matcher = parser(id);
+
+                    if (matcher->is_exact_matcher())
+                    {
+                        std::string value = matcher->to_string();
+                        std::string cleaned;
+                        for (auto c = value.begin(); c < value.end(); ++c)
+                        {
+                            if (*c == '\\')
+                            {
+                                // Backslash found
+                                if ((value.end() - c) > 1 && *(c + 1) == '\\')
+                                {
+                                    cleaned += *c;
+                                    c++;
+                                    continue;
+                                }
+
+                                continue;
+                            }
+
+                            cleaned += *c;
+                        }
+
+                        exact_matchers[cleaned] = id;
+                    }
+                    else
+                    {
+                        matchers[id] = std::move(matcher);
+                    }
                 }
             }
 
@@ -46,7 +76,6 @@ namespace ratl::tokenizer
 
                 while (begin != end)
                 {
-                    bool        found = false;
                     std::string value = std::string(begin, end - i);
 
                     if (value.empty())
@@ -54,22 +83,34 @@ namespace ratl::tokenizer
                         throw std::runtime_error("Unexpected identifier");
                     }
 
-                    for (auto& match: matchers)
+                    try
                     {
-                        auto value_copy = value;
-                        if (match.second->compute(value_copy) && value_copy.empty())
+                        // Trying to find an exact match (O(1))
+                        auto match = exact_matchers.at(value);
+
+                        result.emplace_back(std::make_pair(value, match));
+                        begin = end - i;
+                        i     = 0;
+                        continue;
+                    }
+                    catch (...)
+                    {
+                        auto match = std::find_if(
+                            matchers.begin(),
+                            matchers.end(),
+                            [&value](const typename decltype(matchers)::value_type& match)
+                            {
+                                auto value_ = value;
+                                return (match.second->compute(value_) && value_.empty());
+                            });
+
+                        if (match != matchers.end())
                         {
-                            result.emplace_back(std::make_pair(value, match.first));
-                            found = true;
+                            result.emplace_back(std::make_pair(value, match->first));
                             begin = end - i;
                             i     = 0;
-                            break;
+                            continue;
                         }
-                    }
-
-                    if (found)
-                    {
-                        continue;
                     }
 
                     ++i;
