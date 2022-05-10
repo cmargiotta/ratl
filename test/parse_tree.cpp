@@ -3,6 +3,7 @@
 #include <fstream>
 #include <iostream>
 
+#include <parser/dice.hpp>
 #include <parser/math.hpp>
 #include <parser/regex.hpp>
 
@@ -71,7 +72,36 @@ SCENARIO("Math parse tree")
     {
         ratl::math_parser parser_;
 
-        std::string parse_expr("12+5");
+        WHEN("It is asked to compute")
+        {
+            THEN("It correctly interprets its expression")
+            {
+                std::string parse_expr("12+5*2");
+                auto        tree = parser_(parse_expr);
+                REQUIRE(tree->to_string() == parse_expr);
+                REQUIRE(tree->compute() == 34);
+
+                parse_expr = "(12+5)*2";
+                tree       = parser_(parse_expr);
+                REQUIRE(tree->to_string() == parse_expr);
+                REQUIRE(tree->compute() == 34);
+
+                parse_expr = "12+5^2";
+                tree       = parser_(parse_expr);
+                REQUIRE(tree->to_string() == parse_expr);
+                REQUIRE(tree->compute() == 289);
+            }
+        }
+    }
+}
+
+SCENARIO("Dice parse tree")
+{
+    GIVEN("A regex parser and an expression tree")
+    {
+        ratl::dice_parser parser_;
+
+        std::string parse_expr("10d6");
         auto        tree = parser_(parse_expr);
 
         REQUIRE(tree->to_string() == parse_expr);
@@ -80,7 +110,12 @@ SCENARIO("Math parse tree")
         {
             THEN("It correctly interprets its expression")
             {
-                REQUIRE(tree->compute() == 17);
+                for (int i = 0; i < 100; ++i)
+                {
+                    auto result = tree->compute();
+                    REQUIRE(result <= 60);
+                    REQUIRE(result >= 1);
+                }
             }
         }
     }
