@@ -22,8 +22,8 @@ namespace ratl
     class fixed_endianness
     {
         private:
-            T                                  data;
-            static constexpr inline endianness system_endianness = get_system_endianness();
+            T                            data;
+            static constexpr inline auto system_endianness = get_system_endianness();
 
         public:
             static constexpr inline auto Endianness = Endianness_;
@@ -66,7 +66,7 @@ namespace ratl
                 }
             }
 
-            T swap(T data_) const noexcept
+            inline T swap(T data_) const noexcept
             {
                 if constexpr (sizeof(T) == sizeof(uint8_t))
                 {
@@ -92,6 +92,7 @@ namespace ratl
             }
 
         public:
+            // It is not explicit to a totally transparent alternative to T
             fixed_endianness(T data_) noexcept
             {
                 set(data_);
@@ -99,7 +100,7 @@ namespace ratl
             fixed_endianness() noexcept                              = default;
             ~fixed_endianness() noexcept                             = default;
             fixed_endianness(const fixed_endianness& other) noexcept = default;
-            fixed_endianness(fixed_endianness&& other)               = default;
+            fixed_endianness(fixed_endianness&& other) noexcept      = default;
             fixed_endianness& operator=(fixed_endianness&& other) noexcept = default;
             fixed_endianness& operator=(const fixed_endianness& other) noexcept = default;
 
@@ -113,6 +114,16 @@ namespace ratl
             operator T() const noexcept
             {
                 return get();
+            }
+
+            inline T serialize() const noexcept
+            {
+                return data;
+            }
+
+            inline void deserialize(T data) noexcept
+            {
+                this->data = data;
             }
     };
 }// namespace ratl

@@ -15,6 +15,7 @@ TEST_CASE("Utilities work correctly", "[utils]")
 
     REQUIRE(test.test_number == 255);
     REQUIRE(test.data == 0xFF00);
+    REQUIRE(test.test_number.serialize() == 0xFF00);
 
     REQUIRE((test.test_number + 1) == 256);
 
