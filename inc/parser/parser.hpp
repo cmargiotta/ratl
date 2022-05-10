@@ -8,15 +8,19 @@
 #include <memory>
 #include <stack>
 #include <stdexcept>
+#include <tuple>
 #include <unordered_map>
 
 #include "parse_node.hpp"
 
 namespace ratl
 {
-    template<class Tokenizer, class Root, class... Nodes>
+    template<class Tokenizer, class Root, class... Nodes_>
     class parser
     {
+        public:
+            using nodes = std::tuple<Nodes_...>;
+
         private:
             using ResultType        = typename Root::ResultType;
             using ExpectedInputType = typename Root::ExpectedInputType;
@@ -30,29 +34,31 @@ namespace ratl
                 "Tokenizer handles the right token type");
 
             static_assert(
-                std::conjunction_v<std::is_same<typename Root::ResultType, typename Nodes::ResultType>...>,
+                std::conjunction_v<std::is_same<typename Root::ResultType, typename Nodes_::ResultType>...>,
                 "Every node has the same result type");
 
             static_assert(std::conjunction_v<std::is_same<typename Root::ExpectedInputType,
-                                                          typename Nodes::ExpectedInputType>...>,
+                                                          typename Nodes_::ExpectedInputType>...>,
                           "Every node has the same identifier type");
 
-            static_assert(std::conjunction_v<std::is_base_of<node, Root>, std::is_base_of<node, Nodes>...>,
+            static_assert(std::conjunction_v<std::is_base_of<node, Root>, std::is_base_of<node, Nodes_>...>,
                           "Every node is based on parse_node");
 
         private:
-            Tokenizer tokenizer {Nodes::identifier...};
+            Tokenizer tokenizer {Nodes_::identifier...};
             static const inline std::unordered_map<std::string,
                                                    std::function<std::unique_ptr<node>(const std::string&)>>
-                nodes = {{Nodes::identifier,
-                          [](const std::string& token) -> std::unique_ptr<node>
-                          {
-                              return std::make_unique<Nodes>(token);
-                          }}...};
+                nodes_map = {{Nodes_::identifier,
+                              [](const std::string& token) -> std::unique_ptr<node>
+                              {
+                                  return std::make_unique<Nodes_>(token);
+                              }}...};
 
         private:
             void build_tree(std::unique_ptr<node>& last, std::deque<std::unique_ptr<node>>& parsed)
             {
+                auto i = last->to_string(false);
+
                 if (last->get_type() == node::type::LEAF)
                 {
                     return;
@@ -127,12 +133,12 @@ namespace ratl
                 // Stunting yard algorithm
                 auto tokens = tokenizer(begin, end);
 
-                std::deque<std::unique_ptr<node>>                    output;
-                std::stack<std::pair<std::unique_ptr<node>, size_t>> operators;
+                std::deque<std::unique_ptr<node>> output;
+                std::stack<std::unique_ptr<node>> operators;
 
                 for (const auto& token: tokens)
                 {
-                    auto node_ = nodes.at(token.second)(token.first);
+                    auto node_ = nodes_map.at(token.second)(token.first);
 
                     switch (node_->get_type())
                     {
@@ -140,18 +146,18 @@ namespace ratl
                             output.push_back(std::move(node_));
                             break;
                         case (node::type::DELIMITER_START):
-                            operators.push(std::make_pair(std::move(node_), 0));
-                            output.push_back(nodes.at(token.second)(token.first));
+                            operators.push(std::move(node_));
+                            output.push_back(nodes_map.at(token.second)(token.first));
                             break;
                         case (node::type::DELIMITER_END):
-                            while (operators.top().first->get_type() != node::type::DELIMITER_START)
+                            while (operators.top()->get_type() != node::type::DELIMITER_START)
                             {
                                 if (operators.empty())
                                 {
                                     throw std::runtime_error("Invalid expression");
                                 }
 
-                                output.push_back(std::move(operators.top().first));
+                                output.push_back(std::move(operators.top()));
                                 operators.pop();
                             }
 
@@ -161,8 +167,6 @@ namespace ratl
                             break;
                         case (node::type::OPERATOR):
                         {
-                            auto priority = node_->get_priority();
-
                             switch (node_->get_operands_order())
                             {
                                 case node::operands_order::LEFT:
@@ -171,14 +175,13 @@ namespace ratl
 
                                 default:
                                     while (!operators.empty()
-                                           && operators.top().first->get_type() != node::type::DELIMITER_START
-                                           && operators.top().second >= priority)
+                                           && operators.top()->get_type() != node::type::DELIMITER_START)
                                     {
-                                        output.push_back(std::move(operators.top().first));
+                                        output.push_back(std::move(operators.top()));
                                         operators.pop();
                                     }
 
-                                    operators.push(std::make_pair(std::move(node_), priority));
+                                    operators.push(std::move(node_));
 
                                     break;
                             }
@@ -192,7 +195,7 @@ namespace ratl
                 {
                     if (operators.size() == 1)
                     {
-                        output.push_back(std::move(operators.top().first));
+                        output.push_back(std::move(operators.top()));
                         operators.pop();
                     }
                     else
@@ -206,6 +209,12 @@ namespace ratl
 
                 return std::unique_ptr<Root>(dynamic_cast<Root*>(root_.release()));
             }
+    };
+
+    template<class Tokenizer, class Root, class... Nodes, class... Nodes1>
+    class parser<Tokenizer, Root, std::tuple<Nodes...>, Nodes1...>
+        : public parser<Tokenizer, Root, Nodes..., Nodes1...>
+    {
     };
 }// namespace ratl
 

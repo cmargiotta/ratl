@@ -15,14 +15,12 @@ namespace ratl::regex
             std::string current;
 
         public:
-            static const inline std::string identifier     = "(";
-            static const inline size_t      priority       = 0;
-            static const inline auto        type           = node::type::DELIMITER_START;
-            static const inline auto        operands_order = node::operands_order::LEFT;
+            static const inline std::string identifier = "(";
+            static const inline auto        type       = node::type::DELIMITER_START;
 
         public:
             inline explicit round_par_open(const std::string& str)
-                : node(identifier, priority, type, operands_order), current(str)
+                : node(identifier, type), current(str)
             {
             }
 
@@ -40,14 +38,21 @@ namespace ratl::regex
                     result = result && child->compute(expression);
                 }
 
-                result += ")";
-
                 return result;
             }
 
             inline std::string to_string() override
             {
-                return current;
+                std::string result = "(";
+
+                for (auto& child: this->children)
+                {
+                    result += child->to_string();
+                }
+
+                result += ")";
+
+                return result;
             }
     };
 }// namespace ratl::regex

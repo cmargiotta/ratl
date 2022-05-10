@@ -13,7 +13,7 @@ namespace ratl::regex
             using node = ratl::parse_node<bool>;
 
         public:
-            root(): node("", 0, node::type::ROOT, node::operands_order::ROOT)
+            root(): node("", node::type::ROOT, node::operands_order::ROOT)
             {
             }
 

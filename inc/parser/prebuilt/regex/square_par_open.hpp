@@ -13,14 +13,11 @@ namespace ratl::regex
             using node = ratl::parse_node<bool>;
 
         public:
-            static const inline std::string identifier     = "[";
-            static const inline size_t      priority       = 0;
-            static const inline auto        type           = node::type::DELIMITER_START;
-            static const inline auto        operands_order = node::operands_order::LEFT;
+            static const inline std::string identifier = "[";
+            static const inline auto        type       = node::type::DELIMITER_START;
 
         public:
-            inline explicit square_par_open(const std::string&)
-                : node(identifier, priority, type, operands_order)
+            inline explicit square_par_open(const std::string&): node(identifier, type)
             {
             }
 

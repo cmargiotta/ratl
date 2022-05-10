@@ -15,13 +15,11 @@ namespace ratl::regex
 
         public:
             static const inline std::string identifier     = "+";
-            static const inline size_t      priority       = 0;
             static const inline auto        type           = node::type::OPERATOR;
             static const inline auto        operands_order = node::operands_order::LEFT;
 
         public:
-            inline explicit at_least_one(const std::string&)
-                : node(identifier, priority, type, operands_order)
+            inline explicit at_least_one(const std::string&): node(identifier, type, operands_order)
             {
             }
 
