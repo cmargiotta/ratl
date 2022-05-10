@@ -3,18 +3,17 @@
 
 #include <utility>
 
+#include <parser/parser.hpp>
+#include <parser/prebuilt/arithmetic/by.hpp>
+#include <parser/prebuilt/arithmetic/divided_by.hpp>
+#include <parser/prebuilt/arithmetic/minus.hpp>
+#include <parser/prebuilt/arithmetic/number.hpp>
+#include <parser/prebuilt/arithmetic/par_close.hpp>
+#include <parser/prebuilt/arithmetic/par_open.hpp>
+#include <parser/prebuilt/arithmetic/plus.hpp>
+#include <parser/prebuilt/arithmetic/power.hpp>
+#include <parser/prebuilt/arithmetic/root.hpp>
 #include <parser/tokenizer/regex_tokenizer.hpp>
-
-#include "parser.hpp"
-#include "prebuilt/arithmetic/by.hpp"
-#include "prebuilt/arithmetic/divided_by.hpp"
-#include "prebuilt/arithmetic/minus.hpp"
-#include "prebuilt/arithmetic/number.hpp"
-#include "prebuilt/arithmetic/par_close.hpp"
-#include "prebuilt/arithmetic/par_open.hpp"
-#include "prebuilt/arithmetic/plus.hpp"
-#include "prebuilt/arithmetic/power.hpp"
-#include "prebuilt/arithmetic/root.hpp"
 
 namespace ratl
 {

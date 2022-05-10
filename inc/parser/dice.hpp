@@ -4,11 +4,10 @@
 #include <string>
 #include <tuple>
 
+#include <parser/math.hpp>
+#include <parser/parser.hpp>
+#include <parser/prebuilt/dice_roller/dice.hpp>
 #include <parser/tokenizer/regex_tokenizer.hpp>
-
-#include "math.hpp"
-#include "parser.hpp"
-#include "prebuilt/dice_roller/dice.hpp"
 
 namespace ratl
 {

@@ -11,7 +11,7 @@
 #include <tuple>
 #include <unordered_map>
 
-#include "parse_node.hpp"
+#include <parser/parse_node.hpp>
 
 namespace ratl
 {

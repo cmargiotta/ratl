@@ -3,21 +3,21 @@
 
 #include <utility>
 
-#include "parser.hpp"
-#include "prebuilt/regex/alphanumeric_latin.hpp"
-#include "prebuilt/regex/any.hpp"
-#include "prebuilt/regex/at_least_one.hpp"
-#include "prebuilt/regex/character.hpp"
-#include "prebuilt/regex/digit.hpp"
-#include "prebuilt/regex/minus.hpp"
-#include "prebuilt/regex/non_digit.hpp"
-#include "prebuilt/regex/optional.hpp"
-#include "prebuilt/regex/par_close.hpp"
-#include "prebuilt/regex/root.hpp"
-#include "prebuilt/regex/round_par_open.hpp"
-#include "prebuilt/regex/square_par_open.hpp"
-#include "prebuilt/regex/star.hpp"
-#include "tokenizer/exact_tokenizer.hpp"
+#include <parser/parser.hpp>
+#include <parser/prebuilt/regex/alphanumeric_latin.hpp>
+#include <parser/prebuilt/regex/any.hpp>
+#include <parser/prebuilt/regex/at_least_one.hpp>
+#include <parser/prebuilt/regex/character.hpp>
+#include <parser/prebuilt/regex/digit.hpp>
+#include <parser/prebuilt/regex/minus.hpp>
+#include <parser/prebuilt/regex/non_digit.hpp>
+#include <parser/prebuilt/regex/optional.hpp>
+#include <parser/prebuilt/regex/par_close.hpp>
+#include <parser/prebuilt/regex/root.hpp>
+#include <parser/prebuilt/regex/round_par_open.hpp>
+#include <parser/prebuilt/regex/square_par_open.hpp>
+#include <parser/prebuilt/regex/star.hpp>
+#include <parser/tokenizer/exact_tokenizer.hpp>
 
 namespace ratl
 {
