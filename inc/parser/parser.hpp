@@ -122,7 +122,7 @@ namespace ratl
 
         public:
             template<typename T>
-            std::unique_ptr<node> operator()(T expression)
+            std::unique_ptr<Root> operator()(T expression)
             {
                 return operator()(expression.begin(), expression.end());
             }

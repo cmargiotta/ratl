@@ -69,7 +69,9 @@ namespace ratl
             const operands_order operands_order_;
 
         public:
-            parse_node(std::string id_, type t = type::LEAF, operands_order o = operands_order::LEFT_RIGHT)
+            parse_node(const std::string& id_,
+                       type               t = type::LEAF,
+                       operands_order     o = operands_order::LEFT_RIGHT)
                 : identifier(id_), type_(t), operands_order_(o)
             {
             }
