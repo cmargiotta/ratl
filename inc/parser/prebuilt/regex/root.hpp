@@ -28,6 +28,19 @@ namespace ratl::regex
 
                 return result;
             }
+
+            bool is_exact_matcher()
+            {
+                for (auto& child: this->children)
+                {
+                    if (child->get_type() != node::type::LEAF)
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
     };
 }// namespace ratl::regex
 
