@@ -10,6 +10,5 @@ cpp = meson.get_compiler('cpp')
 
 catch2 = dependency('catch2')
 
-ratl = declare_dependency(include_directories: ['./inc'])
-
+subdir('src')
 subdir('test')

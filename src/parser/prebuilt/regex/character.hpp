@@ -17,7 +17,7 @@ namespace ratl::regex
 
         public:
             static const inline std::string identifier
-                = "\\(,\\),\\[,\\],\\?,\\-,^,\n,\t,\r,1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z,\\+,\\*,\\.,/";
+                = "\\(,\\),\\[,\\],\\?,\\|,\\-,^,\n,\t,\r,1,2,3,4,5,6,7,8,9,0,a,b,c,d,e,f,g,h,i,j,k,l,m,n,o,p,q,r,s,t,u,v,w,x,y,z,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z, ,\\+,\\*,\\.,/";
             static const inline size_t priority = 0;
             static const inline auto   type     = node::type::LEAF;
 
@@ -44,7 +44,7 @@ namespace ratl::regex
 
                 if (to_match.back() == matched.back())
                 {
-                    expression = expression.substr(1);
+                    expression.erase(0, 1);
 
                     return true;
                 }

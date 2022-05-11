@@ -119,35 +119,6 @@ namespace ratl
                 children.emplace_front(std::move(child));
             }
 
-            void export_xtg(std::ostream& output)
-            {
-                if (type_ == type::LEAF)
-                {
-                    output << "\"" << to_string_() << "\" ";
-                }
-                else
-                {
-                    for (auto& child: children)
-                    {
-                        if (type_ != type::ROOT)
-                        {
-                            output << "( \"" << to_string_() << "\" ";
-                        }
-
-                        child->export_xtg(output);
-
-                        if (type_ != type::ROOT)
-                        {
-                            output << ")";
-                        }
-                        else
-                        {
-                            output << '\n';
-                        }
-                    }
-                }
-            }
-
             inline std::string to_string(bool recursive)
             {
                 if (!recursive)

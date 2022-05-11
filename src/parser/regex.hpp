@@ -5,6 +5,7 @@
 
 #include <parser/parser.hpp>
 #include <parser/prebuilt/regex/alphanumeric_latin.hpp>
+#include <parser/prebuilt/regex/alternation.hpp>
 #include <parser/prebuilt/regex/any.hpp>
 #include <parser/prebuilt/regex/at_least_one.hpp>
 #include <parser/prebuilt/regex/character.hpp>
@@ -34,7 +35,8 @@ namespace ratl
                                 regex::par_close,
                                 regex::round_par_open,
                                 regex::square_par_open,
-                                regex::star>;
+                                regex::star,
+                                regex::alternation>;
 
     using regex_tree = decltype(std::declval<regex_parser>()(std::declval<std::string>()));
 }// namespace ratl
