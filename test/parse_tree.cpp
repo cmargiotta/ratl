@@ -1,3 +1,5 @@
+#define CATCH_CONFIG_ENABLE_BENCHMARKING
+
 #include <catch2/catch.hpp>
 
 #include <fstream>
@@ -61,6 +63,29 @@ SCENARIO("Regex parse tree")
 
                 expression = "12344";
                 REQUIRE(tree1->compute(expression));
+            }
+        }
+        AND_WHEN("Two trees are merged")
+        {
+            ratl::regex_parser parser_;
+
+            std::string parse_expr("1*2+a?[\\dA]*");
+            auto        tree = parser_(parse_expr);
+
+            std::string parse_expr1 = "[1-2]+";
+            auto        tree1       = parser_(parse_expr1);
+
+            tree->merge(std::move(tree1));
+
+            THEN("They are correctly merged")
+            {
+                REQUIRE(tree->to_string() == ("(" + parse_expr + ")|(" + parse_expr1 + ")"));
+
+                std::string expression = "12344";
+                REQUIRE(tree->compute(expression));
+
+                expression = "22222aa";
+                REQUIRE(tree->compute(expression));
             }
         }
     }
