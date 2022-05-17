@@ -2,27 +2,10 @@
 
 #include <type_traits>
 
-#include "type_traits.hpp"
+#include <type_traits.hpp>
 
 void function1();
 int  function2(int, int);
-
-struct A
-{
-        int b;
-
-        virtual ~A() = default;
-};
-
-struct B : public A
-{
-};
-
-struct C
-{
-};
-
-MAKE_EXISTENCE_VERIFIER(b)
 
 TEST_CASE("Function traits work correctly", "[traits]")
 {
@@ -35,8 +18,4 @@ TEST_CASE("Function traits work correctly", "[traits]")
 
     REQUIRE(ratl::number_of_args_v<decltype(function1)> == 0);
     REQUIRE(ratl::number_of_args_v<decltype(function2)> == 2);
-
-    REQUIRE(ratl::has_b_v<A>);
-    REQUIRE(ratl::has_b_v<B>);
-    REQUIRE(!ratl::has_b_v<C>);
 }
