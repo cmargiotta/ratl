@@ -41,7 +41,7 @@ namespace ratl::math
             }
 
         public:
-            fraction(T num, T den)
+            fraction(T num, T den) noexcept
             {
                 if (den == 0)
                 {
@@ -117,7 +117,7 @@ namespace ratl::math
             }
 
             template<typename O>
-            inline fraction operator+(O other)
+            inline fraction operator+(O other) const noexcept
             {
                 auto result = *this;
                 result += other;
@@ -125,7 +125,7 @@ namespace ratl::math
                 return result;
             }
 
-            fraction& operator+=(const fraction& other)
+            fraction& operator+=(const fraction& other) noexcept
             {
                 auto lcm = std::lcm(denominator, other.denominator);
 
@@ -139,7 +139,7 @@ namespace ratl::math
                 return *this;
             }
 
-            inline fraction& operator+=(T other)
+            inline fraction& operator+=(T other) noexcept
             {
                 numerator += numerator + (other * denominator);
 
@@ -147,24 +147,24 @@ namespace ratl::math
             }
 
             template<typename O>
-            inline fraction& operator-=(O other)
+            inline fraction& operator-=(O other) noexcept
             {
                 operator+=(-other);
             }
 
-            inline fraction operator-() const
+            inline fraction operator-() const noexcept
             {
                 fraction other(-numerator, denominator);
 
                 return other;
             }
 
-            inline fraction operator-(const auto& other)
+            inline fraction operator-(const auto& other) const noexcept
             {
                 return operator+(-other);
             }
 
-            inline fraction& operator*=(const fraction& other)
+            inline fraction& operator*=(const fraction& other) noexcept
             {
                 numerator *= other.numerator;
                 denominator *= other.denominator;
@@ -174,7 +174,7 @@ namespace ratl::math
                 return *this;
             }
 
-            inline fraction& operator*=(T other)
+            inline fraction& operator*=(T other) noexcept
             {
                 numerator *= other;
 
@@ -184,7 +184,7 @@ namespace ratl::math
             }
 
             template<typename O>
-            inline fraction operator*(O other)
+            inline fraction operator*(O other) const noexcept
             {
                 auto result = *this;
                 result *= other;
@@ -192,7 +192,7 @@ namespace ratl::math
                 return result;
             }
 
-            inline fraction& operator/=(const fraction& other)
+            inline fraction& operator/=(const fraction& other) noexcept
             {
                 numerator *= other.denominator;
                 denominator *= other.numerator;
@@ -203,7 +203,7 @@ namespace ratl::math
             }
 
             template<typename O>
-            inline fraction operator/(O other)
+            inline fraction operator/(O other) const noexcept
             {
                 auto result = *this;
                 result /= other;
@@ -211,12 +211,12 @@ namespace ratl::math
                 return result;
             }
 
-            explicit operator double() const
+            explicit operator double() const noexcept
             {
                 return static_cast<double>(numerator) / denominator;
             }
 
-            explicit operator std::string() const
+            explicit operator std::string() const noexcept
             {
                 std::stringstream ss;
 
