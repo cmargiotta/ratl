@@ -41,7 +41,7 @@ namespace ratl::math
             }
 
         public:
-            fraction(T num, T den) noexcept
+            fraction(T num, T den)
             {
                 if (den == 0)
                 {
