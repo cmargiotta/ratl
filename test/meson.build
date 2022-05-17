@@ -21,6 +21,14 @@ utils_test = executable(
 	dependencies: [ratl, catch2]
 )
 
+math_test = executable(
+	'math_test', 
+	'math.cpp', 
+	link_with: [test_main], 
+	dependencies: [ratl, catch2]
+)
+
 test('Parse tree test', parse_tree_test)
 test('Type traits test', traits_test)
 test('Utils test', utils_test)
+test('Math test', math_test)
