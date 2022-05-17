@@ -5,8 +5,10 @@
 #include <fstream>
 #include <iostream>
 
+#include <math/fraction.hpp>
 #include <parser/dice.hpp>
 #include <parser/math.hpp>
+#include <parser/math_function.hpp>
 #include <parser/regex.hpp>
 
 SCENARIO("Regex parse tree")
@@ -115,6 +117,33 @@ SCENARIO("Math parse tree")
                 tree       = parser_(parse_expr);
                 REQUIRE(tree->to_string() == parse_expr);
                 REQUIRE(tree->compute() == 289);
+            }
+        }
+    }
+}
+
+SCENARIO("Math function parse tree")
+{
+    GIVEN("A regex parser and an expression tree")
+    {
+        ratl::math_function_parser parser_;
+
+        WHEN("It is asked to compute")
+        {
+            THEN("It correctly interprets it")
+            {
+                std::string parse_expr("12/2+2+5xy");
+                auto        tree = parser_(parse_expr);
+                std::unordered_map<std::string, ratl::math::fraction<int>> unknowns;
+                unknowns["x"] = ratl::math::fraction<int>(1, 2);
+                unknowns["y"] = ratl::math::fraction<int>(2, 1);
+
+                tree->simplify();
+
+                REQUIRE(tree->to_string() == "13xy");
+                auto result = tree->compute(unknowns);
+                REQUIRE(result.numerator == 13);
+                REQUIRE(result.denominator == 1);
             }
         }
     }

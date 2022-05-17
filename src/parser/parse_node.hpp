@@ -108,20 +108,26 @@ namespace ratl
                 return type_;
             }
 
-            inline void add_child(std::unique_ptr<parse_node<ResultType, ExpectedInputType>> child)
+            virtual void add_child(std::unique_ptr<parse_node<ResultType, ExpectedInputType>> child)
             {
-                if (type_ != type::ROOT && type_ != type::DELIMITER_START
-                    && (children.size() + 1) > get_operands())
+                children.emplace_front(std::move(child));
+            }
+
+            inline void merge(std::unique_ptr<parse_node>&& other)
+            {
+                while (!other->children.empty())
                 {
-                    throw std::runtime_error("Operands number exceeded");
+                    auto child = std::move(other->children.back());
+                    other->children.pop_back();
+                    add_child(std::move(child));
                 }
 
-                children.emplace_front(std::move(child));
+                other.reset();
             }
 
             inline std::string to_string(bool recursive)
             {
-                if (!recursive)
+                if (recursive)
                 {
                     return to_string();
                 }
@@ -129,7 +135,7 @@ namespace ratl
                 return to_string_();
             }
 
-            inline virtual std::string to_string()
+            virtual std::string to_string()
             {
                 if (children.empty())
                 {

@@ -57,8 +57,6 @@ namespace ratl
         private:
             void build_tree(std::unique_ptr<node>& last, std::deque<std::unique_ptr<node>>& parsed)
             {
-                auto i = last->to_string(false);
-
                 if (last->get_type() == node::type::LEAF)
                 {
                     return;
@@ -144,19 +142,26 @@ namespace ratl
                     {
                         case (node::type::LEAF):
                             output.push_back(std::move(node_));
+
+                            if (!operators.empty()
+                                && operators.top()->get_type() != node::type::DELIMITER_START)
+                            {
+                                output.push_back(std::move(operators.top()));
+                                operators.pop();
+                            }
                             break;
                         case (node::type::DELIMITER_START):
                             operators.push(std::move(node_));
                             output.push_back(nodes_map.at(token.second)(token.first));
                             break;
                         case (node::type::DELIMITER_END):
+                            if (operators.empty())
+                            {
+                                throw std::runtime_error("Invalid expression");
+                            }
+
                             while (operators.top()->get_type() != node::type::DELIMITER_START)
                             {
-                                if (operators.empty())
-                                {
-                                    throw std::runtime_error("Invalid expression");
-                                }
-
                                 output.push_back(std::move(operators.top()));
                                 operators.pop();
                             }
