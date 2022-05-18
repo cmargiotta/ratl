@@ -5,16 +5,14 @@
 #include <string>
 #include <unordered_map>
 
-#include <parser/parse_node.hpp>
+#include <parser/prebuilt/math_function/base_node.hpp>
 
 namespace ratl::math_function
 {
-    class number : public ratl::parse_node<ratl::math::fraction<int>,
-                                           std::unordered_map<std::string, ratl::math::fraction<int>>>
+    class number : public base_node
     {
         private:
-            using node = ratl::parse_node<ratl::math::fraction<int>,
-                                          std::unordered_map<std::string, ratl::math::fraction<int>>>;
+            using node = base_node::node;
 
             const ratl::math::fraction<int> value;
 
@@ -24,12 +22,7 @@ namespace ratl::math_function
 
         public:
             inline explicit number(const std::string& token)
-                : node(identifier, type), value(std::stoi(token))
-            {
-            }
-
-            inline explicit number(ratl::math::fraction<int> val)
-                : node(identifier, type), value(val)
+                : base_node(identifier, type), value(std::stoi(token))
             {
             }
 

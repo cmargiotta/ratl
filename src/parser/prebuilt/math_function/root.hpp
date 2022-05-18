@@ -37,19 +37,6 @@ namespace ratl::math_function
 
                 children[0]->add_child(std::move(child));
             }
-
-            ratl::math::fraction<int> simplify() override
-            {
-                try
-                {
-                    base_node::simplify();
-                }
-                catch (...)
-                {
-                }
-
-                return ratl::math::fraction<int>();
-            }
     };
 }// namespace ratl::math_function
 

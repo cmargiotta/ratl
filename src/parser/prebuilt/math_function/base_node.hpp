@@ -9,7 +9,6 @@
 #include <parser/parse_node.hpp>
 #include <parser/prebuilt/math_function/base_node.hpp>
 #include <parser/prebuilt/math_function/exceptions.hpp>
-#include <parser/prebuilt/math_function/number.hpp>
 
 namespace ratl::math_function
 {
@@ -31,7 +30,7 @@ namespace ratl::math_function
 
             ~base_node() override = default;
 
-            virtual ratl::math::fraction<int> simplify()
+            ratl::math::fraction<int> simplify()
             {
                 try
                 {
@@ -42,25 +41,8 @@ namespace ratl::math_function
                 }
                 catch (...)
                 {
-                    auto children = std::move(this->children);
-                    while (!children.empty())
-                    {
-                        try
-                        {
-                            auto value = dynamic_cast<base_node&>(*children.back()).simplify();
-
-                            add_child(std::make_unique<number>(value));
-                        }
-                        catch (not_simplifiable&)
-                        {
-                            add_child(std::move(children.back()));
-                        }
-
-                        children.pop_back();
-                    }
+                    throw(not_simplifiable());
                 }
-
-                throw(not_simplifiable());
             }
     };
 }// namespace ratl::math_function

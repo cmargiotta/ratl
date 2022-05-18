@@ -14,11 +14,12 @@ namespace ratl::math_function
         private:
             using node = base_node::node;
 
-        private:
             std::string to_string_() override
             {
                 return "+";
             }
+
+            ratl::math::fraction<int> pre_computed_result;
 
         public:
             static const inline std::string identifier     = "\\+";
@@ -32,21 +33,40 @@ namespace ratl::math_function
 
             inline void add_child(std::unique_ptr<node> child) override
             {
-                auto* c = dynamic_cast<plus*>(child.get());
-
-                if (c != nullptr)
+                try
                 {
-                    merge(std::move(child));
+                    // If the child is simplifiable, accumulate it in precomputed result
+                    pre_computed_result += dynamic_cast<base_node&>(*child).simplify();
                 }
-                else
+                catch (...)
                 {
-                    node::add_child(std::move(child));
+                    auto c = dynamic_cast<plus*>(child.get());
+
+                    if (c != nullptr)
+                    {
+                        merge(std::move(child));
+                    }
+                    else
+                    {
+                        node::add_child(std::move(child));
+                    }
                 }
             }
 
             std::string to_string() override
             {
                 std::stringstream ss;
+
+                if (pre_computed_result != 0)
+                {
+                    ss << static_cast<std::string>(pre_computed_result);
+
+                    if (!children.empty())
+                    {
+                        ss << '+';
+                    }
+                }
+
                 for (auto o = children.begin(); o < children.end(); ++o)
                 {
                     ss << (*o)->to_string();
@@ -64,10 +84,13 @@ namespace ratl::math_function
                 compute(std::unordered_map<std::string, ratl::math::fraction<int>>& input) override
             {
                 ratl::math::fraction<int> result;
+
                 for (auto& child: children)
                 {
                     result += child->compute(input);
                 }
+
+                result += pre_computed_result;
 
                 return result;
             }

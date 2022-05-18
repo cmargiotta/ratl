@@ -22,6 +22,8 @@ namespace ratl::math_function
                 return "*";
             }
 
+            ratl::math::fraction<int> pre_computed_result;
+
         public:
             static const inline std::string identifier     = "\\*";
             static const inline auto        type           = node::type::OPERATOR;
@@ -29,14 +31,14 @@ namespace ratl::math_function
 
         public:
             inline explicit by(const std::string& = std::string())
-                : base_node(identifier, type, operands_order)
+                : base_node(identifier, type, operands_order), pre_computed_result(1)
             {
             }
 
             inline ratl::math::fraction<int>
                 compute(std::unordered_map<std::string, ratl::math::fraction<int>>& input) override
             {
-                ratl::math::fraction<int> result(1);
+                ratl::math::fraction<int> result = pre_computed_result;
 
                 for (auto& child: children)
                 {
@@ -48,21 +50,46 @@ namespace ratl::math_function
 
             inline void add_child(std::unique_ptr<node> child) override
             {
-                auto* c = dynamic_cast<by*>(child.get());
-
-                if (c != nullptr)
+                try
                 {
-                    merge(std::move(child));
+                    // If the child is simplifiable, accumulate it in precomputed result
+                    pre_computed_result *= dynamic_cast<base_node&>(*child).simplify();
                 }
-                else
+                catch (...)
                 {
-                    node::add_child(std::move(child));
+                    auto* c = dynamic_cast<by*>(child.get());
+
+                    if (c != nullptr)
+                    {
+                        merge(std::move(child));
+                    }
+                    else
+                    {
+                        node::add_child(std::move(child));
+                    }
                 }
             }
 
             inline std::string to_string() override
             {
                 std::stringstream ss;
+
+                if (pre_computed_result != 0)
+                {
+                    ss << static_cast<std::string>(pre_computed_result);
+
+                    if (!children.empty())
+                    {
+                        auto* test1 = dynamic_cast<unknown*>(children.begin()->get());
+
+                        if (test1 == nullptr
+                            && children.front()->get_type() != node::type::DELIMITER_START)
+                        {
+                            ss << '*';
+                        }
+                    }
+                }
+
                 for (auto child = children.begin(); child < children.end(); ++child)
                 {
                     ss << (*child)->to_string();

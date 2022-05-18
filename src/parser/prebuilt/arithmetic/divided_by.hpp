@@ -13,12 +13,6 @@ namespace ratl::arithmetic
         private:
             using node = ratl::parse_node<int, void>;
 
-        private:
-            std::string to_string_() override
-            {
-                return "/";
-            }
-
         public:
             static const inline std::string identifier     = "/";
             static const inline auto        type           = node::type::OPERATOR;

@@ -138,8 +138,6 @@ SCENARIO("Math function parse tree")
                 unknowns["x"] = ratl::math::fraction<int>(1, 2);
                 unknowns["y"] = ratl::math::fraction<int>(2, 1);
 
-                tree->simplify();
-
                 REQUIRE(tree->to_string() == "13xy");
                 auto result = tree->compute(unknowns);
                 REQUIRE(result.numerator == 13);

@@ -14,6 +14,11 @@ namespace ratl::math_function
             using node = base_node::node;
             const std::string name;
 
+            inline std::string to_string_() override
+            {
+                return name;
+            }
+
         public:
             static const inline std::string identifier = "a-z";
             static const inline auto        type       = node::type::LEAF;
@@ -28,11 +33,6 @@ namespace ratl::math_function
                 compute(std::unordered_map<std::string, ratl::math::fraction<int>>& input) override
             {
                 return input.at(name);
-            }
-
-            inline std::string to_string() override
-            {
-                return name;
             }
     };
 }// namespace ratl::math_function
