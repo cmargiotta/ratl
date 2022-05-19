@@ -29,4 +29,7 @@ TEST_CASE("Function traits work correctly", "[traits]")
     REQUIRE(ratl::with_b<A>);
     REQUIRE(ratl::with_b<B>);
     REQUIRE(!ratl::with_b<C>);
+
+    REQUIRE(ratl::iterator<A*>);
+    REQUIRE(!ratl::iterator<A>);
 }
