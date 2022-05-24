@@ -50,22 +50,25 @@ namespace ratl::math_function
 
             inline void add_child(std::unique_ptr<node> child) override
             {
-                try
+                if (pre_computed_result != 0)
                 {
-                    // If the child is simplifiable, accumulate it in precomputed result
-                    pre_computed_result *= dynamic_cast<base_node&>(*child).simplify();
-                }
-                catch (...)
-                {
-                    auto* c = dynamic_cast<by*>(child.get());
-
-                    if (c != nullptr)
+                    try
                     {
-                        merge(std::move(child));
+                        // If the child is simplifiable, accumulate it in precomputed result
+                        pre_computed_result *= dynamic_cast<base_node&>(*child).simplify();
                     }
-                    else
+                    catch (...)
                     {
-                        node::add_child(std::move(child));
+                        auto* c = dynamic_cast<by*>(child.get());
+
+                        if (c != nullptr)
+                        {
+                            merge(std::move(child));
+                        }
+                        else
+                        {
+                            node::add_child(std::move(child));
+                        }
                     }
                 }
             }
