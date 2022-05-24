@@ -8,6 +8,12 @@ union test_data
         uint16_t                                                data;
 };
 
+struct test_packed
+{
+        ratl::fixed_endianness<uint16_t, ratl::endianness::BIG> test;
+        uint8_t                                                 test_;
+} __attribute__((packed));
+
 TEST_CASE("Utilities work correctly", "[utils]")
 {
     test_data test;
@@ -18,6 +24,8 @@ TEST_CASE("Utilities work correctly", "[utils]")
     REQUIRE(test.test_number.serialize() == 0xFF00);
 
     REQUIRE((test.test_number + 1) == 256);
+
+    REQUIRE(sizeof(test_packed) == (sizeof(uint16_t) + sizeof(uint8_t)));
 
     test.test_number = test.test_number + 1;
     REQUIRE(test.test_number == 256);

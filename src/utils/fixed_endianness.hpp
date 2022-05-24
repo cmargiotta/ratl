@@ -22,10 +22,10 @@ namespace ratl
     class fixed_endianness
     {
         private:
-            T                            data;
             static constexpr inline auto system_endianness = get_system_endianness();
 
         public:
+            T                            data;
             static constexpr inline auto Endianness = Endianness_;
 
         private:
@@ -92,18 +92,6 @@ namespace ratl
             }
 
         public:
-            // It is not explicit to a totally transparent alternative to T
-            fixed_endianness(T data_) noexcept
-            {
-                set(data_);
-            }
-            fixed_endianness() noexcept                              = default;
-            ~fixed_endianness() noexcept                             = default;
-            fixed_endianness(const fixed_endianness& other) noexcept = default;
-            fixed_endianness(fixed_endianness&& other) noexcept      = default;
-            fixed_endianness& operator=(fixed_endianness&& other) noexcept = default;
-            fixed_endianness& operator=(const fixed_endianness& other) noexcept = default;
-
             fixed_endianness& operator=(T data_) noexcept
             {
                 set(data_);
