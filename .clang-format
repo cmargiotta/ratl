@@ -28,7 +28,7 @@ BreakInheritanceList: BeforeColon
 BreakStringLiterals: "false"
 ColumnLimit: "100"
 CompactNamespaces: "false"
-ConstructorInitializerAllOnOneLineOrOnePerLine: "false"
+ConstructorInitializerAllOnOneLineOrOnePerLine: "true"
 Cpp11BracedListStyle: "true"
 DerivePointerAlignment: "true"
 DisableFormat: "false"
