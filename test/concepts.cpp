@@ -39,4 +39,5 @@ TEST_CASE("Iterator trait works correctly", "[traits]")
 {
     REQUIRE(ratl::iterator<std::vector<int>::iterator>);
     REQUIRE(ratl::iterator<int*>);
+    REQUIRE(!ratl::iterator<int>);
 }
