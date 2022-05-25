@@ -28,6 +28,13 @@ concepts_test = executable(
 	dependencies: [ratl, catch2]
 )
 
+algorithm_test = executable(
+	'algorithm_test', 
+	'algorithm.cpp', 
+	link_with: [test_main], 
+	dependencies: [ratl, catch2]
+)
+
 math_test = executable(
 	'math_test', 
 	'math.cpp', 
@@ -40,3 +47,4 @@ test('Type traits test', traits_test)
 test('Utils test', utils_test)
 test('Concepts test', concepts_test)
 test('Math test', math_test)
+test('Algorithm test', algorithm_test)
