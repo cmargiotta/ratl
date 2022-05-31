@@ -1,28 +1,17 @@
 #ifndef UTILS_FIXED_ENDIANNESS_HPP
 #define UTILS_FIXED_ENDIANNESS_HPP
 
+#include <bit>
 #include <cstdint>
 #include <type_traits>
 
 namespace ratl
 {
-    enum class endianness : char
-    {
-        BIG,
-        LITTLE
-    };
-
-    constexpr endianness get_system_endianness()
-    {
-        constexpr uint16_t test_value = 0x00FF;
-        return ((test_value >> 8) == 0) ? endianness::LITTLE : endianness::BIG;
-    }
-
-    template<typename T, endianness Endianness_>
+    template<typename T, std::endian Endianness_>
     class fixed_endianness
     {
         private:
-            static constexpr inline auto system_endianness = get_system_endianness();
+            static constexpr inline auto system_endianness = std::endian::native;
 
         public:
             T                            data;

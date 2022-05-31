@@ -4,14 +4,14 @@
 
 union test_data
 {
-        ratl::fixed_endianness<uint16_t, ratl::endianness::BIG> test_number;
-        uint16_t                                                data;
+        ratl::fixed_endianness<uint16_t, std::endian::big> test_number;
+        uint16_t                                           data;
 };
 
 struct test_packed
 {
-        ratl::fixed_endianness<uint16_t, ratl::endianness::BIG> test;
-        uint8_t                                                 test_;
+        ratl::fixed_endianness<uint16_t, std::endian::big> test;
+        uint8_t                                            test_;
 } __attribute__((packed));
 
 TEST_CASE("Utilities work correctly", "[utils]")
